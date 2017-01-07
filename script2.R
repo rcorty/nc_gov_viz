@@ -46,7 +46,7 @@ cooper <- df %>% spread(key = Choice, value = votes) %>% mutate(cooper_frac = `R
                                                                 cooper_excess = (`Roy Cooper` - `Pat McCrory`)/1000,
                                                                 pop2015 = pop2015/1000)
 
-# lm(formula = cooper_frac ~ pop2015, data = cooper)
+lm(formula = cooper_excess ~ pop2015, data = cooper) %>% summary
 
 
 cooper %>%
@@ -57,7 +57,7 @@ cooper %>%
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   xlab('county') +
   ylab('Cooper (winner) votes in excess of McCrory (loser) (in thousands)') +
-  ggtitle(label = 'Roy Cooper won the NC governors race by winning the few big Counties by a lot') +
+  ggtitle(label = 'Roy Cooper won the NC governors race by winning the few big Counties by a Lot') +
   scale_fill_continuous(low = 'yellow', high = 'blue', name = 'population\n(thousands)') +
   ggsave(filename = 'nc_gov_viz.png', height = 6, width = 16, dpi = 500)
 
@@ -74,8 +74,30 @@ cooper %>%
   scale_fill_gradient2(midpoint = 0.5, high = 'blue', low = 'red') +
   xlab('county population (in thousands)') +
   ylab('Cooper (winner) votes in excess of McCrory (loser) (in thousands)') +
-  ggtitle(label = 'Roy Cooper won the NC governors race by winning the few big Counties by a lot') +
+  ggtitle(label = 'Roy Cooper won the NC governors race by winning the few big Counties by a Lot') +
   ggsave(filename = 'nc_gov_viz2.png', height = 12, width = 12, dpi = 500)
 
 
+cooper %>%
+  ggplot(mapping = aes(x = county, y = cooper_excess)) +
+  geom_abline(slope = 0, size = 1) +
+  geom_label(data = cooper %>% filter(pop2015 > 250),
+             mapping = aes(x = county, y = cooper_excess-5, label = county)) +
+  geom_point(mapping = aes(size = pop2015)) +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),
+        plot.title = element_text(size = 20)) +
+  ylab('Cooper (winner) votes in excess of McCrory (loser) (in thousands)') +
+  xlab('County') +
+  ggtitle(label = 'Roy Cooper won the NC governors race by winning the few big Counties by a Lot') +
+  ggsave(filename = 'nc_gov_viz3.png', height = 8, width = 12, dpi = 500)
 
+
+
+# cooper %>% glimpse
+#
+# library(ggtern)
+#
+# cooper %>%
+#   ggtern(mapping = aes(x = `Roy Cooper`, y = `Pat McCrory`, z = `Lon Cecil`)) +
+#   geom_point(mapping = aes(size = pop2015))
