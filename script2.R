@@ -1,11 +1,5 @@
 library(tidyverse)
 
-simpleCap <- function(x) {
-  x <- tolower(x)
-  s <- strsplit(x, " ")[[1]]
-  paste(toupper(substring(s, 1,1)), substring(s, 2),
-        sep="", collapse=" ")
-}
 
 demog <- read_csv(file = 'PEP_2015_PEPANNRES_with_ann.csv')
 
@@ -24,7 +18,7 @@ nc_demog3 <- nc_demog2 %>% mutate(huge = factor(x = pop2015 > 500000, labels = c
 
 
 
-
+library(stringi)
 
 votes_by_precinct <- read_delim(file = 'resultsPCT20161108_new.txt', delim = '\t') %>% mutate(county = stri_trans_totitle(County))
 
@@ -64,14 +58,17 @@ cooper %>%
   xlab('county') +
   ylab('Cooper (winner) votes in excess of McCrory (loser) (in thousands)') +
   ggtitle(label = 'Roy Cooper won the NC governors race by winning a few big Counties by a lot') +
-  scale_fill_continuous(name = 'population\n(thousands)') +
+  scale_fill_continuous(low = 'yellow', high = 'blue', name = 'population\n(thousands)') +
   ggsave(filename = 'nc_gov_viz.png', height = 6, width = 16, dpi = 500)
 
+
+library(ggrepel)
 
 cooper %>%
   ggplot(mapping = aes(x = pop2015, y = cooper_excess)) +
   geom_point() +
-  geom_label(mapping = aes(label = county, fill = cooper_bi_frac)) +
+  geom_label(data = cooper %>% filter(pop2015 > 300),
+             mapping = aes(x = pop2015+35, y = cooper_excess-5, label = county, fill = cooper_bi_frac)) +
   scale_x_continuous(expand = c(.1, .1)) +
   theme_minimal() +
   scale_fill_gradient2(midpoint = 0.5, high = 'lightblue') +
