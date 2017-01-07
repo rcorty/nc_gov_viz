@@ -57,7 +57,7 @@ cooper %>%
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   xlab('county') +
   ylab('Cooper (winner) votes in excess of McCrory (loser) (in thousands)') +
-  ggtitle(label = 'Roy Cooper won the NC governors race by winning a few big Counties by a lot') +
+  ggtitle(label = 'Roy Cooper won the NC governors race by winning the few big Counties by a lot') +
   scale_fill_continuous(low = 'yellow', high = 'blue', name = 'population\n(thousands)') +
   ggsave(filename = 'nc_gov_viz.png', height = 6, width = 16, dpi = 500)
 
@@ -71,7 +71,10 @@ cooper %>%
              mapping = aes(x = pop2015+35, y = cooper_excess-5, label = county, fill = cooper_bi_frac)) +
   scale_x_continuous(expand = c(.1, .1)) +
   theme_minimal() +
-  scale_fill_gradient2(midpoint = 0.5, high = 'lightblue') +
+  scale_fill_gradient2(midpoint = 0.5, high = 'blue', low = 'red') +
+  xlab('county population (in thousands)') +
+  ylab('Cooper (winner) votes in excess of McCrory (loser) (in thousands)') +
+  ggtitle(label = 'Roy Cooper won the NC governors race by winning the few big Counties by a lot') +
   ggsave(filename = 'nc_gov_viz2.png', height = 12, width = 12, dpi = 500)
 
 
